@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:music_player_app/provider/audio_player_provider.dart';
-import 'package:music_player_app/route.dart';
-import 'package:music_player_app/screens/playlist_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:music_player_app/screens/audio_player_screen.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-        create: (context) => AudioPlayerProvider(),
-      ),
-    ],
-    child: const MyApp(),
-  ));
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,8 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: const PlaylistScreen(),
+      home: const AudioPlayerScreen(),
     );
   }
 }
