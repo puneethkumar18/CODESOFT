@@ -53,7 +53,7 @@ class DrawerWidget extends StatelessWidget {
                     },
                     child: ListTile(
                       title: Text(
-                        time[index],
+                        "${time[index]} Tasks",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
@@ -71,7 +71,7 @@ class DrawerWidget extends StatelessWidget {
                 },
                 child: ListTile(
                   title: Text(
-                    "Complted Tasks",
+                    "Completed Tasks",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
