@@ -34,7 +34,7 @@ void showSnackBar({required BuildContext context, required String content}) {
           content,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 20,
+            fontSize: 18,
           ),
         ),
       ),

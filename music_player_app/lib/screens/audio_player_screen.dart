@@ -89,10 +89,14 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
 
   playNext() async {
     await _audioPlayer.seekToNext();
+    if (loopMode == 0 && songIndex != audioModel.length - 1) songIndex++;
+    if (loopMode == 2) songIndex = songIndex % audioModel.length;
   }
 
   playPrev() async {
     await _audioPlayer.seekToPrevious();
+    if (loopMode == 0 && songIndex != 0) songIndex--;
+    if (loopMode == 2) songIndex = songIndex % audioModel.length;
   }
 
   void seek() async {
@@ -183,53 +187,62 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return SizedBox(
-                              height: 600,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      const Text(
-                                        "Play list",
-                                        style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
+                            return DraggableScrollableSheet(
+                              expand: false,
+                              builder: (context, scrollcontroller) {
+                                return SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        const Text(
+                                          "Song List",
+                                          style: TextStyle(
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
-                                      ),
-                                      const Divider(),
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: audioModel.length,
-                                        itemBuilder: (context, index) {
-                                          final currentSong = audioModel[index];
-                                          return InkWell(
-                                            onTap: () {
-                                              songIndex = index;
-                                              makePlayList();
-                                              play();
-                                              Navigator.pop(context);
-                                            },
-                                            child: ListTile(
-                                              leading: const Icon(
-                                                Icons.music_note,
+                                        const Divider(
+                                          thickness: 2,
+                                          color: Colors.black,
+                                        ),
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: audioModel.length,
+                                          controller: scrollcontroller,
+                                          itemBuilder: (context, index) {
+                                            final song = audioModel[index];
+                                            return InkWell(
+                                              onTap: () {
+                                                songIndex = index;
+                                                makePlayList();
+                                                Future.delayed(
+                                                  const Duration(seconds: 2),
+                                                );
+                                                Navigator.pop(context);
+                                              },
+                                              child: ListTile(
+                                                title: Text(
+                                                  song.title,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                trailing: songIndex == index
+                                                    ? const Icon(
+                                                        Icons.music_note,
+                                                        size: 28,
+                                                      )
+                                                    : null,
                                               ),
-                                              title: Text(
-                                                currentSong.title,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             );
                           },
                         );
